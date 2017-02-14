@@ -1,0 +1,184 @@
+<?php
+
+namespace AdressBookBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Adress
+ *
+ * @ORM\Table(name="adress")
+ * @ORM\Entity(repositoryClass="AdressBookBundle\Repository\AdressRepository")
+ */
+class Adress
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=255)
+     */
+    private $city;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="street", type="string", length=255)
+     */
+    private $street;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="houseNo", type="integer")
+     */
+    private $houseNo;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="flatNo", type="integer")
+     */
+    private $flatNo;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="adresses")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     */
+    
+    private $person;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     * @return Adress
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string 
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set street
+     *
+     * @param string $street
+     * @return Adress
+     */
+    public function setStreet($street)
+    {
+        $this->street = $street;
+
+        return $this;
+    }
+
+    /**
+     * Get street
+     *
+     * @return string 
+     */
+    public function getStreet()
+    {
+        return $this->street;
+    }
+
+    /**
+     * Set houseNo
+     *
+     * @param integer $houseNo
+     * @return Adress
+     */
+    public function setHouseNo($houseNo)
+    {
+        $this->houseNo = $houseNo;
+
+        return $this;
+    }
+
+    /**
+     * Get houseNo
+     *
+     * @return integer 
+     */
+    public function getHouseNo()
+    {
+        return $this->houseNo;
+    }
+
+    /**
+     * Set flatNo
+     *
+     * @param integer $flatNo
+     * @return Adress
+     */
+    public function setFlatNo($flatNo)
+    {
+        $this->flatNo = $flatNo;
+
+        return $this;
+    }
+
+    /**
+     * Get flatNo
+     *
+     * @return integer 
+     */
+    public function getFlatNo()
+    {
+        return $this->flatNo;
+    }
+
+    /**
+     * Set person
+     *
+     * @param \AdressBookBundle\Entity\Person $person
+     * @return Adress
+     */
+    public function setPerson(\AdressBookBundle\Entity\Person $person = null)
+    {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    /**
+     * Get person
+     *
+     * @return \AdressBookBundle\Entity\Person 
+     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
+}

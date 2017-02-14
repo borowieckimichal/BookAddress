@@ -1,0 +1,130 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}AdressBookBundle:Person:showPerson{% endblock %}
+
+{% block body %}
+    <h1>Welcome to the Person:show Person page</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <table class="table">
+
+                    <tr>
+                        <th> Name: </th>
+                        <td> {{ person.name }} </td>     
+                    </tr>
+                    <tr>
+                        <th> Surname: </th>
+                        <td> {{ person.surname }} </td>     
+                    </tr>
+                    <tr>
+                        <th> Description: </th>
+                        <td> {{ person.description }} </td>     
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-4">
+                <a href="{{ path("adressbook_person_showindex") }}"class="btn btn-info btn-lg"> Return to main page </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h3> Phones 
+                    <a href="{{ path("adressbook_phone_addnewphone", {"id": person.id}) }}"class="btn btn-success btn-xs"> Add new Phone </a>
+                </h3>
+
+                {% if person.phones |length > 0 %}
+                    <table class="table">
+                        <tr>
+                            <th> Phone: </th>
+                            <th> Type: </th>
+                            <th> Action:</th>
+                        </tr>  
+
+                        {% for phone in person.phones %}
+
+                            <tr>
+                                <td> {{ phone.number }} </td>
+                                <td> {{ phone.type }} </td>
+                                <td>  
+                                    <a href="{{ path("adressbook_phone_modifyphone", {"id": phone.id}) }}"class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{{ path("adressbook_phone_deletephone", {"id": phone.id}) }}"class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>       
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <p>there is no phones<p>
+                    {% endif %}
+            </div>
+
+
+            <div class="col-md-4">
+                <h3> Adresses 
+                    <a href="{{ path("adressbook_adress_addnewadress", {"id": person.id}) }}"class="btn btn-success btn-xs"> Add new Adress</a>
+                </h3>
+
+                {% if person.adresses |length > 0 %}
+                    <table class="table">
+                        <tr>
+                            <th> City: </th>
+                            <th> Street: </th>
+                            <th> Action: </th>
+                        </tr>
+                        {% for adress in person.adresses %}
+
+                            <tr>
+                                <td>
+                                    {{ adress.city }}
+                                </td>
+                                <td> 
+                                    {{ adress.street }}
+                                    {{ adress.houseNo }} , {{ adress.flatNo }}
+                                </td>
+                                <td>
+                                    <a href="{{ path("adressbook_adress_modifyadress", {"id": adress.id}) }}"class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{{ path("adressbook_adress_deleteadress", {"id": adress.id}) }}"class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>       
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <p>there is no adresses<p>
+                    {% endif %}
+            </div>
+            <div class="col-md-4">
+                <h3> E-mails 
+                    <a href="{{ path("adressbook_email_addnewemail", {"id": person.id}) }}"class="btn btn-success btn-xs">Add new Email</a>
+                </h3>
+
+                {% if person.emails |length > 0 %}
+                    <table class="table">
+                        <tr>
+                            <th> E-mail: </th>
+                            <th> Type: </th>
+                            <th> Action: </th>
+                        </tr>
+                        {% for email in person.emails %}
+
+                            <tr>
+                                <td>
+                                    {{ email.email }}
+                                </td>
+                                <td> 
+                                    {{ email.type }}
+                                </td>
+                                <td>
+                                    <a href="{{ path("adressbook_email_modifyemail", {"id": email.id}) }}"class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{{ path("adressbook_email_deleteemail", {"id": email.id}) }}"class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>       
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <p>there is no emails<p>
+                    {% endif %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

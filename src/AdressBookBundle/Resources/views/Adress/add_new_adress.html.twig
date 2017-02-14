@@ -1,0 +1,17 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}AdressBookBundle:Adress:addNewAdress{% endblock %}
+
+{% block body %}
+    <h1>Welcome to the Adress:addNewAdress page</h1>
+    <div class="container">
+        <p>
+            <a href="{{ url("adressbook_person_showperon", {"id": adress.person.id}) }}"class="btn btn-info"> return to contact's page </a>
+        </p>
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+
+    </div>
+{% endblock %}
