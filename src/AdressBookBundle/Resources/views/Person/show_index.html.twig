@@ -12,7 +12,9 @@
                 <th>Name</th>
                 <th>Surname </th>
                 <th> description</th>
-                <th> Actions </th>
+                <th> Actions: 
+                    <a href="{{ path("adressbook_person_addnewperson") }}"class="btn btn-success btn-sm"> Add new person </a>
+                </th>
             </tr>
             {% for person in persons %}
                 <tr>
