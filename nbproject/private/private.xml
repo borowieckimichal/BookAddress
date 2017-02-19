@@ -2,13 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/michal/Workspace/BookAdress/src/AdressBookBundle/Controller/PhoneController.php</file>
-            <file>file:/home/michal/Workspace/BookAdress/src/AdressBookBundle/Resources/views/Person/show_person.html.twig</file>
-            <file>file:/home/michal/Workspace/BookAdress/src/AdressBookBundle/Controller/PersonController.php</file>
-            <file>file:/home/michal/Workspace/BookAdress/src/AdressBookBundle/Resources/views/Person/show_index.html.twig</file>
-            <file>file:/home/michal/Workspace/BookAdress/src/AdressBookBundle/Entity/Phone.php</file>
-            <file>file:/home/michal/Workspace/BookAdress/src/AdressBookBundle/Repository/PersonRepository.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -37,7 +37,7 @@ class Email
 
     /**
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="emails")
-     * @ORM\JoinColumn(name="emails_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
      * 
      */
     
@@ -96,5 +96,28 @@ class Email
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set person
+     *
+     * @param \AdressBookBundle\Entity\Person $person
+     * @return Email
+     */
+    public function setPerson(\AdressBookBundle\Entity\Person $person = null)
+    {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    /**
+     * Get person
+     *
+     * @return \AdressBookBundle\Entity\Person 
+     */
+    public function getPerson()
+    {
+        return $this->person;
     }
 }

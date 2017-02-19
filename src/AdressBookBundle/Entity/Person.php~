@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="person")
  * @ORM\Entity(repositoryClass="AdressBookBundle\Repository\PersonRepository")
  */
-class Person
-{
+class Person {
+
     /**
      * @var int
      *
@@ -44,29 +44,35 @@ class Person
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Adress", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="Adress", mappedBy="person", cascade={"persist"})
      */
     private $adresses;
+
     /**
      *
-     * @ORM\OneToMany(targetEntity="Phone", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="Phone", mappedBy="person", cascade={"persist"})
      */
     private $phones;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Email", mappedBy="person", cascade={"persist"})
+     */
+    private $emails;
     
     /**
      *
-     * @ORM\OneToMany(targetEntity="Email", mappedBy="person")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="persons")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE") 
      */
     
-    
-    private $emails;
+    private $baseUser;
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -76,8 +82,7 @@ class Person
      * @param string $name
      * @return Person
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
 
         return $this;
@@ -88,8 +93,7 @@ class Person
      *
      * @return string 
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -99,8 +103,7 @@ class Person
      * @param string $surname
      * @return Person
      */
-    public function setSurname($surname)
-    {
+    public function setSurname($surname) {
         $this->surname = $surname;
 
         return $this;
@@ -111,8 +114,7 @@ class Person
      *
      * @return string 
      */
-    public function getSurname()
-    {
+    public function getSurname() {
         return $this->surname;
     }
 
@@ -122,8 +124,7 @@ class Person
      * @param string $description
      * @return Person
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
 
         return $this;
@@ -134,16 +135,17 @@ class Person
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
+
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->adresses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->emails = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -152,8 +154,8 @@ class Person
      * @param \AdressBookBundle\Entity\Adress $adresses
      * @return Person
      */
-    public function addAdress(\AdressBookBundle\Entity\Adress $adresses)
-    {
+    public function addAdress(\AdressBookBundle\Entity\Adress $adresses) {
+        $adresses->setPerson($this);
         $this->adresses[] = $adresses;
 
         return $this;
@@ -164,8 +166,7 @@ class Person
      *
      * @param \AdressBookBundle\Entity\Adress $adresses
      */
-    public function removeAdress(\AdressBookBundle\Entity\Adress $adresses)
-    {
+    public function removeAdress(\AdressBookBundle\Entity\Adress $adresses) {
         $this->adresses->removeElement($adresses);
     }
 
@@ -174,8 +175,7 @@ class Person
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAdresses()
-    {
+    public function getAdresses() {
         return $this->adresses;
     }
 
@@ -185,8 +185,7 @@ class Person
      * @param \AdressBookBundle\Entity\Phone $phones
      * @return Person
      */
-    public function addPhone(\AdressBookBundle\Entity\Phone $phones)
-    {
+    public function addPhone(\AdressBookBundle\Entity\Phone $phones) {
         $this->phones[] = $phones;
 
         return $this;
@@ -197,8 +196,7 @@ class Person
      *
      * @param \AdressBookBundle\Entity\Phone $phones
      */
-    public function removePhone(\AdressBookBundle\Entity\Phone $phones)
-    {
+    public function removePhone(\AdressBookBundle\Entity\Phone $phones) {
         $this->phones->removeElement($phones);
     }
 
@@ -207,8 +205,38 @@ class Person
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPhones()
-    {
+    public function getPhones() {
         return $this->phones;
     }
+
+    /**
+     * Add emails
+     *
+     * @param \AdressBookBundle\Entity\Email $emails
+     * @return Person
+     */
+    public function addEmail(\AdressBookBundle\Entity\Email $emails) {
+        $this->emails[] = $emails;
+
+        return $this;
+    }
+
+    /**
+     * Remove emails
+     *
+     * @param \AdressBookBundle\Entity\Email $emails
+     */
+    public function removeEmail(\AdressBookBundle\Entity\Email $emails) {
+        $this->emails->removeElement($emails);
+    }
+
+    /**
+     * Get emails
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEmails() {
+        return $this->emails;
+    }
+
 }

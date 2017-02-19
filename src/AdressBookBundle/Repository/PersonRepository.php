@@ -12,12 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class PersonRepository extends EntityRepository {
 
-    public function getAllPersonsBySurnameAscending() {
+    public function getAllPersonsBySurnameAscending($user) {
+        
+        
+        
         $em = $this->getEntityManager();
 
         $query = $em->createQuery(
-                "SELECT p FROM AdressBookBundle:Person p ORDER BY p.surname ASC");
-
+                "SELECT p FROM AdressBookBundle:Person p WHERE p.baseUser = :user ORDER BY p.surname ASC");
+        $query->setParameter('user', $user);
         return $query->getResult();
     }
 

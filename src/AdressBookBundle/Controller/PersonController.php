@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use AdressBookBundle\Entity\Person;
+use AdressBookBundle\Entity\User;
 
 class PersonController extends Controller {
 
@@ -16,11 +17,21 @@ class PersonController extends Controller {
     public function showIndexAction() {
         $repo = $this->getDoctrine()->getRepository('AdressBookBundle:Person');
 
-        $persons = $repo->getAllPersonsBySurnameAscending();
-        return $this->render(
-                        'AdressBookBundle:Person:show_index.html.twig', [
-                    "persons" => $persons,
-        ]);
+        $user = $this->container
+                ->get('security.context')
+                ->getToken()
+                ->getUser();
+        $user->getId();
+
+        if ($user instanceof User) {
+
+            $persons = $repo->getAllPersonsBySurnameAscending($user);
+            return $this->render(
+                            'AdressBookBundle:Person:show_index.html.twig', [
+                        "persons" => $persons,
+            ]);
+        }
+        return $this->redirectToRoute("fos_user_security_login");
     }
 
     /**
@@ -30,10 +41,12 @@ class PersonController extends Controller {
     public function showPeronAction($id) {
         $repo = $this->getDoctrine()->getRepository('AdressBookBundle:Person');
         $person = $repo->find($id);
-
+        
         if ($person == null) {
             throw $this->createNotFoundException('nie ma użytkownika z takim ID !!!');
         }
+        
+        $this->checkPerson($person);
         return $this->render(
                         'AdressBookBundle:Person:show_person.html.twig', [
                     "person" => $person,
@@ -66,8 +79,17 @@ class PersonController extends Controller {
         $form->handleRequest($req);
 
         if ($form->isSubmitted()) {//&& $form->isValid()) {
-            $person = $form->getData();
+            $user = $this->container
+                    ->get('security.context')
+                    ->getToken()
+                    ->getUser();
+            $user->getId();
 
+
+
+
+            $person = $form->getData();
+            $person->setBaseUser($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($person);
             $em->flush();
@@ -100,6 +122,8 @@ class PersonController extends Controller {
         $personRepo = $this->getDoctrine()->getRepository("AdressBookBundle:Person");
         $person = $personRepo->find($id);
 
+        $this->checkPerson($person);
+
         $form = $this->generateForm($person, $this->generateUrl('adressbook_person_modifyperson', ['id' => $id]));
         $form->handleRequest($req);
 
@@ -126,12 +150,26 @@ class PersonController extends Controller {
         $personRepo = $this->getDoctrine()->getRepository("AdressBookBundle:Person");
         $personToDelete = $personRepo->find($id);
 
+
+
         if ($personToDelete != null) {
+            $this->checkPerson($personToDelete);
             $em->remove($personToDelete);
             $em->flush();
         }
-
+        
         return $this->redirectToRoute("adressbook_person_showindex");
+    }
+
+    private function checkPerson($person) {
+        $user = $this->container
+                ->get('security.context')
+                ->getToken()
+                ->getUser();
+
+        if ($user !== $person->getBaseUser()) {
+            throw $this->createAccessDeniedException();
+        }
     }
 
 }

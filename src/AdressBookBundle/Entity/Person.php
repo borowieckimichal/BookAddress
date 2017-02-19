@@ -59,7 +59,14 @@ class Person {
      * @ORM\OneToMany(targetEntity="Email", mappedBy="person", cascade={"persist"})
      */
     private $emails;
-
+    
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="persons")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE") 
+     */
+    
+    private $baseUser;
     /**
      * Get id
      *
@@ -232,4 +239,27 @@ class Person {
         return $this->emails;
     }
 
+
+    /**
+     * Set baseUser
+     *
+     * @param \AdressBookBundle\Entity\User $baseUser
+     * @return Person
+     */
+    public function setBaseUser(\AdressBookBundle\Entity\User $baseUser = null)
+    {
+        $this->baseUser = $baseUser;
+
+        return $this;
+    }
+
+    /**
+     * Get baseUser
+     *
+     * @return \AdressBookBundle\Entity\User 
+     */
+    public function getBaseUser()
+    {
+        return $this->baseUser;
+    }
 }

@@ -18,6 +18,8 @@ class PhoneController extends Controller {
         $phone = new Phone();
         $personRepo = $this->getDoctrine()->getRepository("AdressBookBundle:Person");
         $person = $personRepo->find($id);
+        //$checkPerson = $person->getPerson();
+        $this->checkPerson($person);        
 
         $phone->setPerson($person);
         $action = $this->generateUrl('adressbook_phone_addnewphone', ['id' => $id]);
@@ -36,8 +38,11 @@ class PhoneController extends Controller {
         $phone = new Phone();
         $personRepo = $this->getDoctrine()->getRepository("AdressBookBundle:Person");
         $person = $personRepo->find($id);
+        $checkPerson = $person->getPerson();
+        $this->checkPerson($checkPerson);
         $phone->setPerson($person);
-
+            
+ 
         $form = $this->generatePhoneForm($phone, null);
         $form->handleRequest($req);
         if ($form->isSubmitted()) {
@@ -71,15 +76,17 @@ class PhoneController extends Controller {
     public function deletePhoneAction($id) {
         $em = $this->getDoctrine()->getManager();
         $phoneRepo = $this->getDoctrine()->getRepository("AdressBookBundle:Phone");
-        $phoneToDelete = $phoneRepo->find($id);
-        $person = $phoneToDelete->getPerson()->getId();
+        $phoneToDelete = $phoneRepo->find($id);        
+        $person = $phoneToDelete->getPerson();
+        $personId = $person->getId();
 
+        $this->checkPerson($person);
         if ($phoneToDelete != null) {
             $em->remove($phoneToDelete);
             $em->flush();
         }
 
-        return $this->redirectToRoute("adressbook_person_showperon", ['id' => $person]);
+        return $this->redirectToRoute("adressbook_person_showperon", ['id' => $personId]);
     }
 
     /**
@@ -90,7 +97,11 @@ class PhoneController extends Controller {
     public function modifyPhoneAction(Request $req, $id) {
         $phoneRepo = $this->getDoctrine()->getRepository("AdressBookBundle:Phone");
         $phone = $phoneRepo->find($id);
-        $person = $phone->getPerson()->getId();
+        $checkPerson = $phone->getPerson();       
+        $person = $checkPerson->getId();
+        
+      
+        $this->checkPerson($checkPerson);
 
         $form = $this->generatePhoneForm($phone, $this->generateUrl('adressbook_phone_modifyphone', ['id' => $id]));
         $form->handleRequest($req);
@@ -106,6 +117,17 @@ class PhoneController extends Controller {
         return $this->render('AdressBookBundle:Phone:add_new_phone.html.twig', [
                     'form' => $form->createView(), 'phone' => $phone
         ]);
+    }
+    
+        private function checkPerson($person) {
+        $user = $this->container
+                ->get('security.context')
+                ->getToken()
+                ->getUser();
+
+        if ($user !== $person->getBaseUser()) {
+            throw $this->createAccessDeniedException();
+        }
     }
 
 }
